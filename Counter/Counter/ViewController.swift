@@ -15,11 +15,12 @@ class ViewController: UIViewController {
 	@IBOutlet weak var plusUIButton: UIButton!
 	@IBOutlet weak var resetCountUIButton: UIButton!
 	@IBOutlet weak var historyUITextView: UITextView!
-	
+		
 	private var count: Int = 0 {
 		didSet {
 			if count < 0 {
 				count = oldValue
+				historyUITextView.text = "\(getDateFormatter()): Попытка уменьшить значение счётчика ниже 0\n" + historyUITextView.text
 			}
 		}
 	}
@@ -29,45 +30,48 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		countUILabel.text = "Значение счетчика: \(count)"
-		getDateFormatter()
-		historyUITextView.text = "\(dateFormatter!): приложение запущено!"
+		//historyUITextView.text = "\(getDateFormatter()): Приложение запущено"
+		
 	}
 	
-	private func getDateFormatter(){
+	private func getDateFormatter() -> String {
 		let currentDate = Date()
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "dd.MM.yy в HH:mm:ss"
-		dateFormatter.string(from: currentDate)
-		self.dateFormatter = dateFormatter
+		dateFormatter.dateFormat = "dd.MM.yy HH:mm:ss"
+		let resultDate = dateFormatter.string(from: currentDate)
+		return resultDate
 	}
 	
 	private func infoCount() {
 		countUILabel.text = "Значение счетчика: \(String(count))"
 	}
 	
-	private func dateInfo() {
-		
-	}
-	
-	
 	@IBAction func upCount(_ sender: Any) {
 		count += 1
 		infoCount()
+		//historyUITextView.text = historyUITextView.text + "\n\(getDateFormatter()): Значение изменено на +1"
+		historyUITextView.text = "\(getDateFormatter()): Значение изменено на +1\n" + historyUITextView.text
 	}
 	
 	@IBAction func plusCount(_ sender: Any) {
 		count += 1
 		infoCount()
+		historyUITextView.text = "\(getDateFormatter()): Значение изменено на +1\n" + historyUITextView.text
 	}
 	
 	@IBAction func minusCount(_ sender: Any) {
+		if count != 0{
+			historyUITextView.text = "\(getDateFormatter()): Значение изменено на -1\n" + historyUITextView.text
+		}
 		count -= 1
 		infoCount()
+		
 	}
 	
 	@IBAction func resetCount(_ sender: Any) {
 		count = 0
 		infoCount()
+		historyUITextView.text = "\(getDateFormatter()): Значение сброшено\n" + historyUITextView.text
 	}
 	
 }
